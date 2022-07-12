@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import os
 import sqlalchemy as db
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from numpy import genfromtxt
 
 engine = db.create_engine('sqlite:///tables.db')
 
@@ -25,17 +28,31 @@ def Load_Data(file_name):
 
 
 
-Base = db.declarative_base()
+Base = declarative_base()
+session = sessionmaker()
+session.configure(bind=engine)
+s = session()
 
 class Countries(Base):
+	__tablename__ = 'countries'
 	id = db.Column(db.String, primary_key = True)
 	name = db.Column(db.String)
 
-data = Load_Data(countries.csv)
+class Users(Base):
+	__tablename__ = 'users'
+	id = db.Column(db.String, primary_key = True)
+	name = db.Column(db.String)
 
-for i in data:
-	record = 
+try:
+	data = Load_Data(countries.csv)
+
+	for i in data:
+		record = Countries(**{
+			'id' : i[0],
+			'name' : i[1]
+		})
+		s.add(record)
+finally:
+	s.close()
 
 meta.create_all(engine)
-
-
