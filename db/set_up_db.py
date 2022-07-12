@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
+from enum import unique
 import os
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from numpy import genfromtxt
 import csv
+from collections import Counter
 
 meta = db.MetaData() 
-
-def Load_Data(file_name):
-    data = genfromtxt(file_name, delimiter=',', skip_header=1, converters={0: lambda s: str(s)})
-    return data.tolist()
-
 
 engine = db.create_engine('sqlite:///tables.db')
 Base = declarative_base()
@@ -28,18 +25,11 @@ class Countries(Base):
 class Users(Base):
 	__tablename__ = 'users'
 	id = db.Column(db.String, primary_key = True)
-	name = db.Column(db.String)
+	name = db.Column(db.String, unique = True)
 
 Base.metadata.create_all(engine)
 
-#r = Countries(id = 'sv', name = 'Sweden')
-#s.add(r)
-
-
 try:	
-	'''file_name = 'countries.csv'
-	data = Load_Data(file_name)'''
-
 	file = open('countries.csv')
 	read_file = csv.reader(file)
 	header = []
@@ -50,16 +40,10 @@ try:
 		record = Countries(id = row[0], name = row[1])
 		rows.append(record)
 	
-	from collections import Counter
 	counts = Counter([c.id for c in rows])
-	#print(counts)
 	s.bulk_save_objects(rows)
 	file.close()
 
 finally:
-	
 	s.commit()
 	s.close()
-
-
-
