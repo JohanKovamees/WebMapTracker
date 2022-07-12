@@ -29,20 +29,19 @@ class Users(Base):
 
 Base.metadata.create_all(engine)
 
-try:	
-	file = open('countries.csv')
-	read_file = csv.reader(file)
-	header = []
-	header = next(read_file)
+try:
+	with open('countries.csv') as countries_file:
+		read_file = csv.reader(countries_file)
+		header = []
+		header = next(read_file)
 
-	rows = []
-	for row in read_file:
-		record = Countries(id = row[0], name = row[1])
-		rows.append(record)
-	
-	counts = Counter([c.id for c in rows])
-	s.bulk_save_objects(rows)
-	file.close()
+		rows = []
+		for row in read_file:
+			record = Countries(id = row[0], name = row[1])
+			rows.append(record)
+		
+		counts = Counter([c.id for c in rows])
+		s.bulk_save_objects(rows)
 
 finally:
 	s.commit()
