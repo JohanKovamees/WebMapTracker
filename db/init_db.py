@@ -15,7 +15,7 @@ def create_db(db):
         connection.text_factory = str
 
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE [countries] ([id] INTEGER PRIMARY KEY NOT NULL UNIQUE, [short] SHORT, [name] NAME);")
+        cursor.execute("CREATE TABLE [COUNTRIES] ([id] INTEGER PRIMARY KEY NOT NULL UNIQUE, [short] TEXT, [name] TEXT);")
 
 def Add_Record(db, data):
     #Insert record into table
@@ -25,7 +25,7 @@ def Add_Record(db, data):
 
         cursor = connection.cursor()
 
-        cursor.execute("INSERT INTO countries({cols}) VALUES({vals});".format(cols = str(data.keys()).strip('[]'), 
+        cursor.execute("INSERT INTO COUNTRIES({cols}) VALUES({vals});".format(cols = str(data.keys()).strip('[]'), 
                     vals=str([data[i] for i in data]).strip('[]')
                     ))
 
@@ -45,8 +45,7 @@ create_db(db) #Create DB
     #For every record, format and insert to table
 for i in data:
     record = {
-            'id' : i[0],
-            'short' : i[1],
-            'name' : i[2]
+            'short' : i[0],
+            'name' : i[1]
             }
 Add_Record(db, record)
