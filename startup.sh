@@ -5,9 +5,7 @@ source wmt_env/bin/activate
 export FLASK_APP=src/__init__
 export FLASK_ENV=development
 
-cd db
-python3 set_up_db.py
-cd ..
+python3 db/set_up_db.py
 
 flask run
 

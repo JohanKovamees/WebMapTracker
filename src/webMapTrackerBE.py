@@ -1,7 +1,7 @@
 import sqlalchemy as db 
 import random
 import string
-from db.set_up_db import User
+from db.set_up_db import Users
 
 def genId():
     r = ''.join([random.choice(string.ascii_letters
@@ -10,6 +10,6 @@ def genId():
 
 def addUser(userName):
     id = genId()
-    temp_user = User(id = genId(), name = userName)
-    
+    temp_user = Users(id = genId(), name = userName)
+
 

@@ -8,7 +8,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        #DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
 
     if test_config is None:
@@ -38,7 +38,9 @@ def create_app(test_config=None):
         # show the user id for that user
         return f'User {escape(user_id)}'
 
-    from . import login
-    app.register_blueprint(login.bp)
+    @app.route('/login')
+    def login():
+        from . import login
+        app.register_blueprint(login.bp)       
 
     return app
