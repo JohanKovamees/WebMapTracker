@@ -26,6 +26,7 @@ class Users(Base):
 	__tablename__ = 'users'
 	id = db.Column(db.String, primary_key = True)
 	name = db.Column(db.String, unique = True)
+	passwd = db.Column(db.String)
 
 Base.metadata.create_all(engine)
 
