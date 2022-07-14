@@ -1,37 +1,26 @@
 #!/usr/bin/env python3
-from enum import unique
 import os
-import sqlalchemy as db
+import sqlalchemy as dbase
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from numpy import genfromtxt
 import csv
 from collections import Counter
+from models import Countries,Users,Base
 
-Base = declarative_base()
-class Countries(Base):
-	__tablename__ = 'countries'
-	abb = db.Column(db.String, primary_key = True)
-	name = db.Column(db.String)
 
-class Users(Base):
-	__tablename__ = 'users'
-	id = db.Column(db.String, primary_key = True)
-	name = db.Column(db.String, unique = True)
-	passwd = db.Column(db.String)
+
 
 if __name__ == '__main__':
-	meta = db.MetaData()
-	db_path = 'sqlite:///' + os.getcwd() + '/db/tables.db'
-
-	engine = db.create_engine(db_path)
+	meta = dbase.MetaData()
+	dbase_path = 'sqlite:///' + os.getcwd() + '/tables.db'
+	engine = dbase.create_engine(dbase_path)
 	
 	session = sessionmaker()
 	session.configure(bind=engine)
 	s = session()
 
 	Base.metadata.create_all(engine)
-	file_path = os.getcwd() + '/db/countries.csv'
+	file_path = os.getcwd() + '/countries.csv'
 
 	try:
 		with open(file_path) as countries_file:
@@ -46,9 +35,9 @@ if __name__ == '__main__':
 			
 			counts = Counter([c.abb for c in rows])
 			s.bulk_save_objects(rows)
-	#except:
-	#	s.rollback()
-	#	pass
+	except:
+		#s.rollback()
+		pass
 
 	finally:
 		s.commit()
