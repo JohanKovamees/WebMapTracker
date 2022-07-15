@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 import os
-import sqlalchemy as dbase
+from sqlalchemy import Column, String, MetaData, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import csv
 from collections import Counter
-from models import Countries,Users,Base
+from models import Countries,Users,Association,Base
 
 
 
 
 if __name__ == '__main__':
-	meta = dbase.MetaData()
+	meta = MetaData()
 	dbase_path = 'sqlite:///' + os.getcwd() + '/tables.db'
-	engine = dbase.create_engine(dbase_path)
+	engine = create_engine(dbase_path)
 	
 	session = sessionmaker()
 	session.configure(bind=engine)

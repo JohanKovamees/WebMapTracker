@@ -1,27 +1,36 @@
-from calendar import c
 import os
-#from select import select
-import sqlalchemy as dbase
+from sqlalchemy import Column, String, MetaData, create_engine, ForeignKey, Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship, backref
 
 Base = declarative_base()
 dbase_path = 'sqlite:///' + os.getcwd() + '/tables.db'
 
+class Association(Base):
+    __tablename__ = 'association'
+    Column("countries_id", ForeignKey("countries.id"), primary_key=True)
+    Column("users_id", ForeignKey("users.id"), primary_key=True)
+    extra_data = Column(String(50))
+    countries = relationship("Countries", back_populates="users")
+    users = relationship("Users", back_populates="countries")
 
 class Countries(Base):
-	__tablename__ = 'countries'
-	abb = dbase.Column(dbase.String)
-	name = dbase.Column(dbase.String, primary_key = True)
+    __tablename__ = 'countries'
+    abb = Column(String, primary_key = True)
+    name = Column(String)
+    users = relationship("Association", back_populates="countries")
 
 class Users(Base):
-	__tablename__ = 'users'
-	name = dbase.Column(dbase.String, primary_key = True)
-	passwd = dbase.Column(dbase.String)
+    __tablename__ = 'users'
+    name = Column(String, primary_key = True)
+    passwd = Column(String)
+    countries = relationship("Association", backref="users")
+
+
 
 def get_all_countries():
-    meta = dbase.MetaData()
-    engine = dbase.create_engine(dbase_path)
+    meta = MetaData()
+    engine = create_engine(dbase_path)
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
@@ -33,15 +42,43 @@ def get_all_countries():
     return c
 
 def get_country(country_name):
-    meta = dbase.MetaData()
-    engine = dbase.create_engine(dbase_path)
+    meta = MetaData()
+    engine = create_engine(dbase_path)
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()
-    country = s.query(Countries).get(country_name)
-    c = "" + country.name
+    country_obj = s.query(Countries).get(country_name)
+    country = "" + country_obj.name
     s.close()
-    return c
+    return country
+
+def get_user(username):
+    meta = MetaData()
+    engine = create_engine(dbase_path)
+    session = sessionmaker()
+    session.configure(bind=engine)
+    s = session()
+    user = s.query(Users).get(username)
+    s.close()
+    return user
+
+def add_user(username,hashed_pass):
+    meta = MetaData()
+    engine = create_engine(dbase_path)
+    session = sessionmaker()
+    session.configure(bind=engine)
+    s = session()
+
+    temp_user = Users(name = username, passwd = hashed_pass)
+    try:
+        s.query(Users).add(temp_user)
+    except:
+        print("User already exits")
+        s.rollback()
+    finally:
+        s.commit()
+        s.close()
+    
 
 if __name__ == "__main__":
     pass
