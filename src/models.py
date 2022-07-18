@@ -25,7 +25,7 @@ class Countries(Base):
     name = Column(String)
     #users = relationship("Association", back_populates="countries")
 
-    keywords = relationship('users',
+    users = relationship('Users',
         secondary=relation,
         back_populates='countries')
 
@@ -34,7 +34,7 @@ class Users(Base):
     name = Column(String, primary_key = True)
     passwd = Column(String)
     #countries = relationship("Association", backref="users")
-    keywords = relationship('countries',
+    countries = relationship('Countries',
         secondary=relation,
         back_populates='users')
 
