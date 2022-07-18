@@ -1,5 +1,5 @@
 import os
-from crud import get_all_countries, get_country, get_user, add_country_to_user, remove_country_from_user
+from crud import get_all_countries, get_country, get_user, add_country_to_user, remove_country_from_user, check_if_visited
 from markupsafe import escape
 from flask import Flask
 from sqlalchemy import MetaData, create_engine
@@ -53,14 +53,14 @@ with session() as s:
             user_string = get_user(user,s)
             return user_string.name
 
-        @app.route('/user/<user>/add/<abb>')
+        @app.route('/user/<user>/<abb>')
         def add_country(user, abb):
-            add_country_to_user(user, abb, s)
-            return "added " + abb + " to " + user
-
-        @app.route('/user/<user>/rm/<abb>')
-        def rm_country(user, abb):
-            remove_country_from_user(user, abb, s)
-            return "removed " + abb + " from " + user
+            check = check_if_visited(user, abb, s)
+            if check == True:
+                remove_country_from_user(user, abb, s)
+                return "Removed " + abb + " from " + user
+            else:
+                add_country_to_user(user, abb, s)
+                return "Added " + abb + " to " + user
         
         return app
