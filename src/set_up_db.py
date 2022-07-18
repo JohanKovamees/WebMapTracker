@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import csv
 from collections import Counter
-from models import Countries,Users,Association,Base
+from models import Countries, Base#, Users,  relation
 
 
 

@@ -1,30 +1,42 @@
 import os
 from sqlalchemy import Column, String, MetaData, create_engine, ForeignKey, Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship, backref
+from sqlalchemy.orm import sessionmaker, relationship
 
 Base = declarative_base()
 dbase_path = 'sqlite:///' + os.getcwd() + '/tables.db'
 
-class Association(Base):
+'''class Association(Base):
     __tablename__ = 'association'
     Column("countries_id", ForeignKey("countries.id"), primary_key=True)
     Column("users_id", ForeignKey("users.id"), primary_key=True)
-    extra_data = Column(String(50))
+    extra_data = Column(String(5))
     countries = relationship("Countries", back_populates="users")
-    users = relationship("Users", back_populates="countries")
+    users = relationship("Users", back_populates="countries")'''
+
+relation = Table('relation', Base.metadata,
+    Column('users_name', ForeignKey('users.name'), primary_key=True),
+    Column('countries_abb', ForeignKey('countries.abb'), primary_key=True)
+)
 
 class Countries(Base):
     __tablename__ = 'countries'
     abb = Column(String, primary_key = True)
     name = Column(String)
-    users = relationship("Association", back_populates="countries")
+    #users = relationship("Association", back_populates="countries")
+
+    keywords = relationship('users',
+        secondary=relation,
+        back_populates='countries')
 
 class Users(Base):
     __tablename__ = 'users'
     name = Column(String, primary_key = True)
     passwd = Column(String)
-    countries = relationship("Association", backref="users")
+    #countries = relationship("Association", backref="users")
+    keywords = relationship('countries',
+        secondary=relation,
+        back_populates='users')
 
 
 
