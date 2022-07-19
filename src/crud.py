@@ -18,8 +18,15 @@ def get_user(username, s):
     try:
         user = s.query(Users).get(username)
     except:
-        print("Couldn't get user")
+        print("User does not exist")
     return user
+
+def check_user_exist(username, s):
+    try:
+        user = s.query(Users).get(username)
+    except:
+        return False
+    return True
 
 def add_user(username, hashed_pass, s):
     temp_user = Users(name = username, passwd = hashed_pass)
