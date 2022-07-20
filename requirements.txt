@@ -3,3 +3,4 @@ wheel==0.33.1
 sqlalchemy
 numpy
 flask
+Werkzeug

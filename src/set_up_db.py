@@ -6,7 +6,8 @@ from sqlalchemy.orm import sessionmaker
 import csv
 from collections import Counter
 from models import Countries, Base
-from crud import add_user, add_country_to_user
+from crud import add_country_to_user
+from login import register
 
 
 
@@ -37,9 +38,10 @@ if __name__ == '__main__':
 				counts = Counter([c.abb for c in rows])
 				s.bulk_save_objects(rows)
 			
-			add_user("User1", "1", s)
-			add_user("User2", "2", s)
-			add_user("User3", "3", s)
+				register("User1","1",s)
+				register("User2","2",s)
+				register("User3","3",s)
+
 
 			add_country_to_user("User1", "US", s)
 

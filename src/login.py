@@ -1,49 +1,26 @@
-from flask import request
-from werkzeug.security import generate_password_hash
-from models import Users
+from werkzeug.security import generate_password_hash, check_password_hash
 from crud import get_user, add_user, check_user_exist
 
-#bp = Blueprint('login', __name__, url_prefix='/login')
-
-#@bp.route('/register', methods=('GET', 'POST'))
-def register(s):
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+def register(username, password, s):
         exist_cond = check_user_exist(username, s)
-
-        error = None
-        if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
-        elif exist_cond:
-            error = "User already exists"
-        if error is None:
-                add_user(username,generate_password_hash(password))
-
-                '''error = f"User {username} is already registered."
-                return redirect(url_for("auth.login"))
-        flash(error)
-    return render_template('auth/register.html')'''
-
-#@bp.route('/login', methods=('GET', 'POST'))
-def login(s):
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        exist_cond = check_user_exist(username, s)
-        alleged_user = Users(name = username, passwd = generate_password_hash(password))
-        if exist_cond:
-            real_user = get_user(username, s)
-        if real_user == alleged_user:
-            return True
-        else:
+        if exist_cond == True:
+            print("Can't Register existing user")
             return False
+        else:
+            add_user(username,generate_password_hash(password), s)
+            print("Added User")
+            return True
 
 
-        
-        
 
-        #return redirect(url_for('index'))
-    #return render_template('auth/login.html')
+def login(username, password, s):
+    real_user = get_user(username, s)
+    check_password = check_password_hash(real_user.passwd, password)
+
+    if real_user is None:
+        return False
+    if check_password == True:
+        print("Login Successful")
+        return True
+    else:
+        return False
