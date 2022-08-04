@@ -10,5 +10,3 @@ python3 src/set_up_db.py
 flask run
 
 deactivate
-
-rm -rf db/tables.db

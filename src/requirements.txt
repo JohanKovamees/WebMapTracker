@@ -4,3 +4,4 @@ sqlalchemy
 numpy
 flask
 Werkzeug
+python-dotenv
