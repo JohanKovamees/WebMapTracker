@@ -11,6 +11,7 @@ RUN pip3 install -r /app/requirements.txt
 
 ENV FLASK_APP=flaskp.py
 ENV FLASK_DEBUG=1
+RUN python3 set_up_db.py && chmod +x flaskp.py
 
 #EXPOSE 5000
 #ENTRYPOINT ["tail", "-f", "/dev/null"]

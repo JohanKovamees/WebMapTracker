@@ -2,7 +2,7 @@ from models import Countries, Users
 
 def get_all_countries(s):
     country_list = s.query(Countries).all()
-    str:c = ""
+    c = ""
     for i in country_list:
         c += i.name + "|" + i.abb + ", "
     return c
