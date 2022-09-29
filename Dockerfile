@@ -1,11 +1,12 @@
 FROM ubuntu:latest
 
-RUN apt update && apt-get install -y python3-pip sqlite3
+RUN apt update && apt-get install -y python3-pip sqlite3 npm
 WORKDIR /app
 
 COPY ./src/ /app
 
-RUN pip3 install -r /app/requirements.txt
+RUN pip3 install -r /app/requirements.txt && \
+npm install @amcharts/amcharts5
 
 #WORKDIR /app/src
 
