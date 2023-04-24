@@ -14,6 +14,6 @@ ENV FLASK_APP=flaskp.py
 ENV FLASK_DEBUG=1
 RUN python3 set_up_db.py && chmod +x flaskp.py
 
-#EXPOSE 5000
+EXPOSE 5000
 #ENTRYPOINT ["tail", "-f", "/dev/null"]
-CMD ["flask", "run", "--host=0.0.0.0", "--port=80"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
