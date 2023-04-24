@@ -13,14 +13,14 @@ function onCountryClick(e) {
 
   // Add or remove a country
   if (e.originalEvent.ctrlKey) {
-    axios.delete(`http://localhost:5000/api/user/${username}/countries/${countryAbb}`);
+    axios.delete(`/api/user/${username}/countries/${countryAbb}`);
   } else {
-    axios.post(`http://localhost:5000/api/user/${username}/countries/${countryAbb}`);
+    axios.post(`/api/user/${username}/countries/${countryAbb}`);
   }
 }
 
 // Load GeoJSON data for countries and add to map
-axios.get('https://unpkg.com/world-atlas@2.0.0-preview.4/countries-50m.json')
+axios.get('https://unpkg.com/world-atlas@3.0.0/countries-50m.json')
   .then(response => {
     const countriesLayer = L.geoJSON(response.data, {
       onEachFeature: (feature, layer) => {

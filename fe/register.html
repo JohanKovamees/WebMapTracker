@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <h1>Register</h1>
@@ -26,7 +27,7 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const response = await axios.post('http://localhost:5000/api/register', { username, password });
+            const response = await axios.post('/api/register', { username, password });
 
 
             if (response.data.Response === "Registration successful") {

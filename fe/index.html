@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Start Page</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -32,7 +33,7 @@
       const password = document.getElementById('password').value;
   
       try {
-        const response = await axios.post('http://localhost:5000/api/login', { username, password });
+        const response = await axios.post('/api/login', { username, password });
         if (response.data.Response === "Login successful") {
           // Redirect to the main app page on successful login
           window.location.href = `map.html?username=${username}`; // Updated to point to app.html

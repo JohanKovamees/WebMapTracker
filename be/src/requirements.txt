@@ -5,3 +5,4 @@ numpy
 flask
 Werkzeug
 python-dotenv
+flask-cors

@@ -15,7 +15,7 @@ def register(username, password, s):
 
 def login(username, password, s):
     real_user = get_user(username, s)
-    check_password = check_password_hash(real_user.passwd, password)
+    check_password = check_password_hash(real_user.password, password)
 
     if real_user is None:
         return False
