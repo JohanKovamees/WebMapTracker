@@ -1,12 +1,12 @@
-FROM ubuntu:latest
+# Use the official Nginx image as the base image
+FROM nginx:latest
 
-RUN apt-get update && \
-    apt-get install -y python3
+# Copy your frontend files to the Nginx HTML directory
+COPY app.html register.html index.html style.css main.js /usr/share/nginx/html/
 
-WORKDIR /app
+# Expose the default Nginx port
+EXPOSE 80
 
-COPY app.html register.html start.html  style.css main.js ./
+# Run Nginx in the foreground to keep the container running
+CMD ["nginx", "-g", "daemon off;"]
 
-EXPOSE 8000
-
-CMD ["python3", "-m", "http.server"]
