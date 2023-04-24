@@ -33,7 +33,7 @@
   
       try {
         const response = await axios.post('/api/login', { username, password });
-        if (response.data.success) {
+        if (response.data.Response === "Login successful") {
           // Redirect to the main app page on successful login
           window.location.href = 'app.html'; // Updated to point to app.html
         } else {
