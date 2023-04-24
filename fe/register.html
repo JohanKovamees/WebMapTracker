@@ -17,10 +17,6 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
         <button type="submit">Register</button>
     </form>
     <script>
@@ -29,7 +25,6 @@
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const email = document.getElementById('email').value;
 
             const response = await fetch('/api/register', {
                 method: 'POST',
@@ -38,8 +33,7 @@
                 },
                 body: JSON.stringify({
                     username: username,
-                    password: password,
-                    email: email
+                    password: password
                 })
             });
 

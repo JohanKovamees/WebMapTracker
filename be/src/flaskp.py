@@ -25,8 +25,8 @@ with session() as s:
         def login_web():
 
             user_json = request.json
-            username = user_json["Username"]
-            password = user_json["Password"]
+            username = user_json["username"]
+            password = user_json["password"]
 
             login_successful = login(username, password, s)
             if login_successful:
