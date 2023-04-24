@@ -13,9 +13,9 @@ function onCountryClick(e) {
 
   // Add or remove a country
   if (e.originalEvent.ctrlKey) {
-    axios.delete(`/user/${username}/countries/${countryAbb}`);
+    axios.delete(`/api/user/${username}/countries/${countryAbb}`);
   } else {
-    axios.post(`/user/${username}/countries/${countryAbb}`);
+    axios.post(`/api/user/${username}/countries/${countryAbb}`);
   }
 }
 

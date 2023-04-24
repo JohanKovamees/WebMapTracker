@@ -21,7 +21,7 @@ with session() as s:
         def startpage():
             return 'StartPage'
 
-        @app.route('/login', methods=['POST'])
+        @app.route('/api/login', methods=['POST'])
         def login_web():
 
             user_json = request.json
@@ -38,7 +38,7 @@ with session() as s:
                     "Response" : "Login unsuccessful"
                 }
 
-        @app.route('/register', methods=['POST'])
+        @app.route('/api/register', methods=['POST'])
         def register_web():
             user_json = request.json
             username = user_json["Username"]
@@ -54,22 +54,22 @@ with session() as s:
                     "Response" : "Registration unsuccessful"
                 }
 
-        @app.route('/countries', methods=['GET'])
+        @app.route('/api/countries', methods=['GET'])
         def get_countries():
             all_countries_string = get_all_countries(s)
             return all_countries_string
         
-        @app.route('/country/<country>', methods=['GET'])
+        @app.route('/api/country/<country>', methods=['GET'])
         def get_single_country(country):
             country = get_country(country, s)
             return country.name
         
-        @app.route('/user/<user>', methods=['GET'])
+        @app.route('/api/user/<user>', methods=['GET'])
         def get_a_user(user):
             user_string = get_user(user,s)
             return user_string.name
 
-        @app.route('/user/<user>/countries/<abb>', methods=['POST'])
+        @app.route('/api/user/<user>/countries/<abb>', methods=['POST'])
         def add_country(user, abb):
             dict = request.json
             abb = dict["Country"]
@@ -91,7 +91,7 @@ with session() as s:
             add_country_to_user(user, abb, s)
             return "Added " + abb + " to " + user'''
 
-        @app.route('/user/<user>/countries/<abb>', methods=['DELETE'])
+        @app.route('/api/user/<user>/countries/<abb>', methods=['DELETE'])
         def delete_country(user, abb):
             dict = request.json
             abb = dict["Country"]

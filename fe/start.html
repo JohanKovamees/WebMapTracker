@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start Page</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to the Travel Tracker</h1>
+
+    <form id="login-form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      
+      <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="register.html">Register here</a>.</p>
+  </div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    // Handle form submission
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+  
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+  
+      try {
+        const response = await axios.post('/api/login', { username, password });
+        if (response.data.success) {
+          // Redirect to the main app page on successful login
+          window.location.href = 'app.html'; // Updated to point to app.html
+        } else {
+          alert('Invalid login credentials. Please try again.');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while logging in. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>
