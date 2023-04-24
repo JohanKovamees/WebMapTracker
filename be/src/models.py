@@ -23,7 +23,7 @@ class Countries(Base):
 class Users(Base):
     __tablename__ = 'users'
     name = Column(String, primary_key = True)
-    passwd = Column(String)
+    password = Column(String)
 
     countries = relationship('Countries',
         secondary=user_visited_countries,

@@ -31,7 +31,7 @@ def check_user_exist(username, s):
         return True
 
 def add_user(username, hashed_pass, s):
-    temp_user = Users(name = username, passwd = hashed_pass)
+    temp_user = Users(name = username, password = hashed_pass)
     try:
         s.add(temp_user)
     except:

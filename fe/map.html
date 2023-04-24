@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Map</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
   <div id="map-container"></div>
@@ -17,7 +18,7 @@
     // Fetch the user's map data
     async function fetchMapData() {
       try {
-        const response = await axios.get(`http://localhost:5000/api/map-data?username=${username}`);
+        const response = await axios.get(`/api/map-data?username=${username}`);
         // Render the map with the data
         renderMap(response.data);
       } catch (error) {

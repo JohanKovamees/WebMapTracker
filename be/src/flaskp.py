@@ -5,6 +5,7 @@ from sqlalchemy import MetaData, create_engine
 from contextlib import contextmanager
 from sqlalchemy.orm import sessionmaker
 from login import login, register
+from flask_cors import CORS
 
 @contextmanager
 def create_session():
@@ -18,6 +19,8 @@ def create_session():
     finally:
         session.close()
 
+
+
 meta = MetaData()
 dbase_path = 'sqlite:///' + os.getcwd() + '/tables.db'
 engine = create_engine(dbase_path)
@@ -25,6 +28,7 @@ engine = create_engine(dbase_path)
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app)
 
     @app.route('/')
     def startpage():
