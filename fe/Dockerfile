@@ -5,7 +5,7 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY index.html register.html start.html  style.css main.js ./
+COPY app.html register.html start.html  style.css main.js ./
 
 EXPOSE 8000
 
