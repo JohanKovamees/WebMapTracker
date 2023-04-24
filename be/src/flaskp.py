@@ -41,8 +41,8 @@ with session() as s:
         @app.route('/api/register', methods=['POST'])
         def register_web():
             user_json = request.json
-            username = user_json["Username"]
-            password = user_json["Password"]
+            username = user_json["username"]
+            password = user_json["password"]
 
             register_successful = register(username, password, s)
             if register_successful:
