@@ -8,8 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-  <div id="map-container"></div>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <div id="map"></div>
   <script>
     // Get the username from the URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -28,36 +27,31 @@
     }
 
     function renderMap(mapData) {
-      // Render the map with the user's data
+      const visitedCountries = mapData.visitedCountries;
+
+      const map = L.map('map').setView([20, 0], 2);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      // Define a GeoJSON data object containing the countries' geometries
+      const geoJsonData = {/* Add your GeoJSON data here */};
+
+      // Define a function to style the countries based on whether they are visited or not
+      function styleCountry(feature) {
+        return {
+          fillColor: visitedCountries.includes(feature.id) ? 'green' : 'gray',
+          weight: 2,
+          opacity: 1,
+          color: 'white',
+          fillOpacity: 0.7
+        };
+      }
+
+      // Add countries to the map
+      L.geoJSON(geoJsonData, {style: styleCountry}).addTo(map);
     }
-
-    function renderMap(mapData) {
-  const visitedCountries = mapData.visitedCountries;
-
-  const map = L.map('map').setView([20, 0], 2);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-
-  // Define a GeoJSON data object containing the countries' geometries
-  const geoJsonData = {/*...*/};
-
-  // Define a function to style the countries based on whether they are visited or not
-  function styleCountry(feature) {
-    return {
-      fillColor: visitedCountries.includes(feature.id) ? 'green' : 'gray',
-      weight: 2,
-      opacity: 1,
-      color: 'white',
-      fillOpacity: 0.7
-    };
-  }
-
-  // Add countries to the map
-  L.geoJSON(geoJsonData, {style: styleCountry}).addTo(map);
-}
-
 
     fetchMapData();
   </script>

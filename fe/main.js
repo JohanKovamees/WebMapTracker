@@ -20,7 +20,7 @@ function onCountryClick(e) {
 }
 
 // Load GeoJSON data for countries and add to map
-axios.get('https://unpkg.com/world-atlas@2.0.0-preview.4/countries-50m.json')
+axios.get('https://unpkg.com/world-atlas@3.0.0/countries-50m.json')
   .then(response => {
     const countriesLayer = L.geoJSON(response.data, {
       onEachFeature: (feature, layer) => {
