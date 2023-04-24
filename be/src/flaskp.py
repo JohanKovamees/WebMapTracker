@@ -80,7 +80,8 @@ def create_app(test_config=None):
     
     @app.route('/api/user/<user>', methods=['GET'])
     def get_a_user(user):
-        user_string = get_user(user,s)
+        with create_session() as session:
+            user_string = get_user(user, session)
         return user_string.name
 
     @app.route('/api/user/<user>/countries/<abb>', methods=['POST'])
