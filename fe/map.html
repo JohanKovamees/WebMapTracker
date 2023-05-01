@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Map</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -16,6 +16,7 @@
 
     // Fetch the user's map data
     async function fetchMapData() {
+      console.log('fetchMapData called');
       try {
         const response = await axios.get(`/api/map-data?username=${username}`);
         // Render the map with the data
@@ -26,7 +27,9 @@
       }
     }
 
+    // Render the map with GeoJSON data
     function renderMap(mapData) {
+      console.log('renderMap called');
       const visitedCountries = mapData.visitedCountries;
 
       const map = L.map('map').setView([20, 0], 2);
@@ -35,22 +38,27 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      // Define a GeoJSON data object containing the countries' geometries
-      const geoJsonData = {/* Add your GeoJSON data here */};
+      // Load the GeoJSON data
+      axios.get('./custom.geo.json').then((response) => {
+        const geoJsonData = response.data;
 
-      // Define a function to style the countries based on whether they are visited or not
-      function styleCountry(feature) {
-        return {
-          fillColor: visitedCountries.includes(feature.id) ? 'green' : 'gray',
-          weight: 2,
-          opacity: 1,
-          color: 'white',
-          fillOpacity: 0.7
-        };
-      }
+        // Define a function to style the countries based on whether they are visited or not
+        function styleCountry(feature) {
+          return {
+            fillColor: visitedCountries.includes(feature.properties.Abbreviation) ? 'green' : 'gray',
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            fillOpacity: 0.7
+          };
+        }
 
-      // Add countries to the map
-      L.geoJSON(geoJsonData, {style: styleCountry}).addTo(map);
+        // Add countries to the map
+        L.geoJSON(geoJsonData, {style: styleCountry}).addTo(map);
+      }).catch((error) => {
+        console.error(error);
+        alert('An error occurred while loading the GeoJSON data. Please try again.');
+      });
     }
 
     fetchMapData();

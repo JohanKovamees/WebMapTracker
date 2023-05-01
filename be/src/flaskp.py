@@ -1,4 +1,5 @@
 import os
+import ssl
 from crud import get_all_countries, get_country, get_user, add_country_to_user, remove_country_from_user
 from flask import Flask, request, jsonify
 from sqlalchemy import MetaData, create_engine
@@ -36,7 +37,7 @@ def create_app(test_config=None):
 
     @app.route('/api/login', methods=['POST'])
     def login_web():
-
+        print("Inside login")
         user_json = request.json
         username = user_json["username"]
         password = user_json["password"]
@@ -55,6 +56,7 @@ def create_app(test_config=None):
 
     @app.route('/api/register', methods=['POST'])
     def register_web():
+        print("Inside register")
         user_json = request.json
         username = user_json["username"]
         password = user_json["password"]
@@ -84,12 +86,14 @@ def create_app(test_config=None):
     
     @app.route('/api/user/<user>', methods=['GET'])
     def get_a_user(user):
+        print("Inside get_a_user")
         with create_session() as session:
             user_string = get_user(user, session)
         return user_string.name
 
     @app.route('/api/user/<user>/countries/<abb>', methods=['POST'])
     def add_country(user, abb):
+        print("Inside add_country")
         dict = request.json
         abb = dict["Country"]
         user = dict["User"]
@@ -107,6 +111,7 @@ def create_app(test_config=None):
 
     @app.route('/api/map-data', methods=['GET'])
     def map_data():
+        print("Inside map-data")
         username = request.args.get('username')
         if not username:
             return jsonify({"Error": "Missing username parameter"}), 400
@@ -121,6 +126,7 @@ def create_app(test_config=None):
 
     @app.route('/api/user/<user>/countries/<abb>', methods=['DELETE'])
     def delete_country(user, abb):
+        print("Inside delete_country")
         dict = request.json
         abb = dict["Country"]
         user = dict["User"]
@@ -136,3 +142,9 @@ def create_app(test_config=None):
             }
     
     return app
+
+if __name__ == '__main__':
+    app = create_app()
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    context.load_cert_chain(certfile='cert.pem', keyfile='key.pem')
+    app.run(host='0.0.0.0', port=5000, ssl_context=context)

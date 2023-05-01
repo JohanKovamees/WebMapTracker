@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Start Page</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -23,7 +23,6 @@
 
     <p>Don't have an account? <a href="register.html">Register here</a>.</p>
   </div>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     // Handle form submission
     document.getElementById('login-form').addEventListener('submit', async (event) => {
@@ -35,9 +34,11 @@
       try {
         const response = await axios.post('/api/login', { username, password });
         if (response.data.Response === "Login successful") {
+          console.log(`Successful login for user: ${username}`);
           // Redirect to the main app page on successful login
-          window.location.href = `map.html?username=${username}`; // Updated to point to app.html
+          window.location.href = `map.html?username=${username}`;
         } else {
+          console.log(`Failed login attempt for user: ${username}`);
           alert('Invalid login credentials. Please try again.');
         }
       } catch (error) {

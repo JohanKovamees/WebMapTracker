@@ -7,6 +7,8 @@ RUN apt-get update && \
 WORKDIR /app
 
 COPY ./src/ /app
+COPY cert.pem /app/cert.pem
+COPY key.pem /app/key.pem
 
 RUN pip3 install -r /app/requirements.txt
 
@@ -16,4 +18,4 @@ ENV FLASK_DEBUG=1
 RUN python3 set_up_db.py && chmod +x flaskp.py
 
 EXPOSE 5000
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["python3", "flaskp.py"]

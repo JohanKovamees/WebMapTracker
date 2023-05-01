@@ -43,7 +43,7 @@ if __name__ == '__main__':
 				register("User3","3",s)
 
 
-			add_country_to_user("User1", "US", s)
+			add_country_to_user("User1", "SE", s)
 
 		except:
 			s.rollback()
