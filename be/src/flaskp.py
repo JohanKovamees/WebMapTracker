@@ -47,12 +47,17 @@ def create_app(test_config=None):
         
         if login_successful:
             return {
-                "Response" : "Login successful"
+                "response" : "Login successful"
             }
         else:
             return {
-                "Response" : "Login unsuccessful"
+                "response" : "Login unsuccessful"
             }
+
+    @app.after_request
+    def add_cache_control(response):
+        response.headers['Cache-Control'] = 'no-store, must-revalidate'
+        return response
 
     @app.route('/api/register', methods=['POST'])
     def register_web():
@@ -65,11 +70,11 @@ def create_app(test_config=None):
             register_successful = register(username, password, session)
         if register_successful:
             return {
-                "Response" : "Registration successful"
+                "response" : "Registration successful"
             }
         else:
             return {
-                "Response" : "Registration unsuccessful"
+                "response" : "Registration unsuccessful"
             }
 
     @app.route('/api/countries', methods=['GET'])
@@ -101,27 +106,25 @@ def create_app(test_config=None):
             successful_add = add_country_to_user(user, abb, session)
         if successful_add:
             return {
-                "Response" : f"{abb} added to {user}"
+                "response" : f"{abb} added to {user}"
             }
         else:
             return {
-                "Response" : "Failed to add"
+                "response" : "Failed to add"
             }
 
 
-    @app.route('/api/map-data', methods=['GET'])
-    def map_data():
+    @app.route('/api/user/<user>/map-data', methods=['GET'])
+    def map_data(user):
         print("Inside map-data")
-        username = request.args.get('username')
-        if not username:
-            return jsonify({"Error": "Missing username parameter"}), 400
 
         with create_session() as session:
-            user = get_user(username, session)
-        if not user:
-            return jsonify({"Error": "User not found"}), 404
+            user_obj = get_user(user, session)
+            if not user_obj:
+                return jsonify({"error": "User not found"}), 404
 
-        visited_countries = [country.abb for country in user.countries]
+            visited_countries = [country.abb for country in user_obj.countries]
+
         return jsonify({"visitedCountries": visited_countries})
 
     @app.route('/api/user/<user>/countries/<abb>', methods=['DELETE'])
@@ -134,11 +137,11 @@ def create_app(test_config=None):
             successful_remove = remove_country_from_user(user, abb, session)
         if successful_remove:
             return {
-                "Response" : f"{abb} removed from {user}"
+                "response" : f"{abb} removed from {user}"
             }
         else:
             return {
-                "Response" : "Failed to remove"
+                "response" : "Failed to remove"
             }
     
     return app

@@ -30,7 +30,7 @@
             const response = await axios.post('/api/register', { username, password });
 
 
-            if (response.data.Response === "Registration successful") {
+            if (response.data.response === "Registration successful") {
                 alert('Registration successful!');
                 window.location.href = 'index.html';
             } else {

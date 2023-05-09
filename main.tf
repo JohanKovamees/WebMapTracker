@@ -1,11 +1,11 @@
 provider "google" {
-  project = "your-gcp-project-id"
-  region  = "us-central1"
-  zone    = "us-central1-a"
+  project = "todo"
+  region  = "todo"
+  zone    = "todo"
 }
 
 resource "google_compute_network" "vpc" {
-  name                    = "my-webapp-vpc"
+  name                    = "WebMapTracker-vpc"
   auto_create_subnetworks = "false"
 }
 
@@ -28,7 +28,7 @@ resource "google_compute_firewall" "firewall" {
 }
 
 resource "google_compute_instance" "default" {
-  name         = "my-webapp-instance"
+  name         = "WebMapTracker"
   machine_type = "f1-micro"
 
   boot_disk {
@@ -48,9 +48,7 @@ resource "google_compute_instance" "default" {
   metadata_startup_script = <<-EOF
                             #!/bin/bash
                             apt-get update
-                            apt-get install -y apache2
-                            systemctl start apache2
-                            systemctl enable apache2
-                            echo "Hello, World!" > /var/www/html/index.html
+                            apt-get install -y docker.io
+                            docker pull
                             EOF
 }

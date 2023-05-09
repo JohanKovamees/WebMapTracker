@@ -15,12 +15,16 @@ def register(username, password, s):
 
 def login(username, password, s):
     real_user = get_user(username, s)
-    check_password = check_password_hash(real_user.password, password)
 
     if real_user is None:
+        print(f"User {username} not found.")
         return False
+
+    check_password = check_password_hash(real_user.password, password)
+
     if check_password == True:
-        print("Login Successful")
+        print("Login successful")
         return True
     else:
         return False
+

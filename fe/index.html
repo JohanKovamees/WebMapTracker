@@ -33,10 +33,12 @@
   
       try {
         const response = await axios.post('/api/login', { username, password });
-        if (response.data.Response === "Login successful") {
+        if (response.data.response === "Login successful") {
           console.log(`Successful login for user: ${username}`);
           // Redirect to the main app page on successful login
-          window.location.href = `map.html?username=${username}`;
+          //Send user to map.html with username as a query parameter
+
+          window.location.replace(`https://localhost/map.html?username=${encodeURIComponent(username)}&t=${Date.now()}`);
         } else {
           console.log(`Failed login attempt for user: ${username}`);
           alert('Invalid login credentials. Please try again.');

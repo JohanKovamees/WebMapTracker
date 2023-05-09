@@ -8,6 +8,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Function to handle clicks on countries
 function onCountryClick(e) {
+  console.log('onCountryClick called');
   const countryAbb = e.target.feature.properties.iso_a2;
   const username = 'your_username'; // Replace with the actual username
 
@@ -22,6 +23,7 @@ function onCountryClick(e) {
 // Load GeoJSON data for countries and add to map
 axios.get('https://unpkg.com/world-atlas@3.0.0/countries-50m.json')
   .then(response => {
+    console.log('GeoJSON data loaded');
     const countriesLayer = L.geoJSON(response.data, {
       onEachFeature: (feature, layer) => {
         layer.on('click', onCountryClick);
