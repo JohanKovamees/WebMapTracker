@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Map</title>
@@ -10,7 +12,8 @@
 </head>
 <body>
   <div id="map"></div>
-  <script>
+
+  <script defer>
     // Get the username from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('username');
@@ -19,7 +22,7 @@
     async function fetchMapData() {
       console.log('fetchMapData called');
       try {
-        const response = await axios.get(`/api/map-data?username=${username}`);
+        const response = await axios.get(`/api/user/${username}/map-data`);
         console.log('fetchMapData response:', response); // Add this log statement
         // Render the map with the data
         renderMap(response.data);
@@ -27,6 +30,7 @@
         console.error(error);
         alert('An error occurred while fetching the map data. Please try again.');
       }
+      console.log('fetchMapData finished');
     }
 
     // Render the map with GeoJSON data

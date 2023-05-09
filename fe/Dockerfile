@@ -2,7 +2,7 @@
 FROM nginx:latest
 
 # Copy your frontend files to the Nginx HTML directory
-COPY app.html register.html index.html style.css main.js /usr/share/nginx/html/
+COPY map.html register.html index.html style.css main.js /usr/share/nginx/html/
 COPY custom.geo.json /usr/share/nginx/html/
 
 
