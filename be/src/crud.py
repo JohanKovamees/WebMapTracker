@@ -1,5 +1,6 @@
 from models import Countries, Users
 
+
 def get_all_countries(s):
     country_list = s.query(Countries).all()
     c = ""
@@ -7,9 +8,11 @@ def get_all_countries(s):
         c += i.name + "|" + i.abb + ", "
     return c
 
+
 def get_country(abb, s):
     country_obj = s.query(Countries).get(abb)
     return country_obj
+
 
 def get_user(username, s):
     try:
@@ -17,6 +20,7 @@ def get_user(username, s):
     except:
         print("User does not exist")
     return user
+
 
 def check_user_exist(username, s):
     try:
@@ -30,8 +34,9 @@ def check_user_exist(username, s):
             return False
         return True
 
+
 def add_user(username, hashed_pass, s):
-    temp_user = Users(name = username, password = hashed_pass)
+    temp_user = Users(name=username, password=hashed_pass)
     try:
         s.add(temp_user)
     except:
@@ -41,9 +46,10 @@ def add_user(username, hashed_pass, s):
     s.commit()
     return True
 
+
 def add_country_to_user(username, abb, s):
-    user_t = get_user(username,s)
-    country_t = get_country(abb,s)
+    user_t = get_user(username, s)
+    country_t = get_country(abb, s)
     try:
         user_t.countries.append(country_t)
     except:
@@ -53,7 +59,8 @@ def add_country_to_user(username, abb, s):
         s.commit()
         return True
 
-def remove_country_from_user(username, abb, s): 
+
+def remove_country_from_user(username, abb, s):
     ret_var = False
     user = get_user(username, s)
     temp_list = user.countries
@@ -63,6 +70,7 @@ def remove_country_from_user(username, abb, s):
     s.commit()
     ret_var = True
     return ret_var
+
 
 def check_if_visited(username, abb, s):
     user = get_user(username, s)
