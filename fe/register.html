@@ -8,39 +8,41 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
-    <h1>Register</h1>
-    <form id="register-form">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-      </div>
-      <button type="submit">Register</button>
-    </form>
-    <script>
-      document
-        .getElementById("register-form")
-        .addEventListener("submit", async (event) => {
-          event.preventDefault();
+    <div class="container">
+      <h1>Register</h1>
+      <form id="register-form">
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <input type="submit" value="Register" />
+      </form>
+      <script>
+        document
+          .getElementById("register-form")
+          .addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-          const response = await axios.post("/api/register", {
-            username,
-            password,
+            const response = await axios.post("/api/register", {
+              username,
+              password,
+            });
+
+            if (response.data.response === "Registration successful") {
+              alert("Registration successful!");
+              window.location.href = "index.html";
+            } else {
+              alert("Registration failed. Please try again.");
+            }
           });
-
-          if (response.data.response === "Registration successful") {
-            alert("Registration successful!");
-            window.location.href = "index.html";
-          } else {
-            alert("Registration failed. Please try again.");
-          }
-        });
-    </script>
+      </script>
+    </div>
   </body>
 </html>

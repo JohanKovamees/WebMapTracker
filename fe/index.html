@@ -18,43 +18,44 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required />
 
-        <button type="submit">Login</button>
+        <input type="submit" value="Login" />
       </form>
 
       <p>Don't have an account? <a href="register.html">Register here</a>.</p>
-    </div>
-    <script>
-      // Handle form submission
-      document
-        .getElementById("login-form")
-        .addEventListener("submit", async (event) => {
-          event.preventDefault();
-          console.log("Login form submitted");
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
 
-          try {
-            const response = await axios.post("/api/login", {
-              username,
-              password,
-            });
-            if (response.data.response === "Login successful") {
-              console.log(`Successful login for user: ${username}`);
-              // Redirect to the main app page on successful login
-              // Send user to map.html with username as a query parameter
+      <script>
+        // Handle form submission
+        document
+          .getElementById("login-form")
+          .addEventListener("submit", async (event) => {
+            event.preventDefault();
+            console.log("Login form submitted");
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-              const redirectTo = `/map.html?username=${username}&t=${Date.now()}`;
-              console.log("Redirecting to:", redirectTo);
-              window.location.replace(redirectTo);
-            } else {
-              console.log(`Failed login attempt for user: ${username}`);
-              alert("Invalid login credentials. Please try again.");
+            try {
+              const response = await axios.post("/api/login", {
+                username,
+                password,
+              });
+              if (response.data.response === "Login successful") {
+                console.log(`Successful login for user: ${username}`);
+                // Redirect to the main app page on successful login
+                // Send user to map.html with username as a query parameter
+
+                const redirectTo = `/map.html?username=${username}&t=${Date.now()}`;
+                console.log("Redirecting to:", redirectTo);
+                window.location.replace(redirectTo);
+              } else {
+                console.log(`Failed login attempt for user: ${username}`);
+                alert("Invalid login credentials. Please try again.");
+              }
+            } catch (error) {
+              console.error(error);
+              alert("An error occurred while logging in. Please try again.");
             }
-          } catch (error) {
-            console.error(error);
-            alert("An error occurred while logging in. Please try again.");
-          }
-        });
-    </script>
+          });
+      </script>
+    </div>
   </body>
 </html>

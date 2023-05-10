@@ -38,10 +38,23 @@
         console.log("fetchMapData finished");
       }
 
+      async function updateVisitedCountries(updatedVisitedCountries) {
+        try {
+          await axios.post(`/api/user/${username}/update-map-data`, {
+            visitedCountries: updatedVisitedCountries,
+          });
+        } catch (error) {
+          console.error(error);
+          alert(
+            "An error occurred while updating the visited countries. Your changes might not be saved."
+          );
+        }
+      }
+
       // Render the map with GeoJSON data
       function renderMap(mapData) {
         console.log("renderMap called");
-        const visitedCountries = mapData.visitedCountries;
+        let visitedCountries = mapData.visitedCountries;
 
         const map = L.map("map", {
           doubleClickZoom: false,
@@ -83,15 +96,45 @@
 
             function onEachFeature(feature, layer) {
               layer.on({
-                click: function (e) {
+                click: async function (e) {
                   const countryAbbreviation = feature.properties.Abbreviation;
 
                   if (visitedCountries.includes(countryAbbreviation)) {
                     visitedCountries = visitedCountries.filter(
                       (abbr) => abbr !== countryAbbreviation
                     );
+                    try {
+                      await axios.delete(
+                        `/api/user/${username}/countries/${countryAbbreviation}`,
+                        {
+                          data: {
+                            Country: countryAbbreviation,
+                            User: username,
+                          },
+                        }
+                      );
+                    } catch (error) {
+                      console.error(error);
+                      alert(
+                        "An error occurred while updating the visited countries. Your changes might not be saved."
+                      );
+                    }
                   } else {
                     visitedCountries.push(countryAbbreviation);
+                    try {
+                      await axios.post(
+                        `/api/user/${username}/countries/${countryAbbreviation}`,
+                        {
+                          Country: countryAbbreviation,
+                          User: username,
+                        }
+                      );
+                    } catch (error) {
+                      console.error(error);
+                      alert(
+                        "An error occurred while updating the visited countries. Your changes might not be saved."
+                      );
+                    }
                   }
 
                   // Update the country style
@@ -104,24 +147,6 @@
             L.geoJSON(geoJsonData, {
               style: styleCountry,
               onEachFeature: onEachFeature,
-              onEachFeature: function (feature, layer) {
-                layer.on({
-                  click: function (e) {
-                    // Toggle the country's visited status
-                    const index = visitedCountries.indexOf(
-                      feature.properties.Abbreviation
-                    );
-                    if (index === -1) {
-                      visitedCountries.push(feature.properties.Abbreviation);
-                    } else {
-                      visitedCountries.splice(index, 1);
-                    }
-
-                    // Update the country style
-                    layer.setStyle(styleCountry(feature));
-                  },
-                });
-              },
             }).addTo(map);
           })
           .catch((error) => {
@@ -131,7 +156,6 @@
             );
           });
       }
-
       window.onload = fetchMapData;
     </script>
   </body>

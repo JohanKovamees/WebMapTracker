@@ -13,13 +13,43 @@ function onCountryClick(e) {
   const countryAbb = e.target.feature.properties.iso_a2;
   const username = "your_username"; // Replace with the actual username
 
-  // Add or remove a country
-  if (e.originalEvent.ctrlKey) {
-    axios.delete(`/api/user/${username}/countries/${countryAbb}`);
-  } else {
-    axios.post(`/api/user/${username}/countries/${countryAbb}`);
+  async function onCountryClick(e) {
+    console.log("onCountryClick called");
+    const countryAbb = e.target.feature.properties.iso_a2;
+    const username = "your_username"; // Replace with the actual username
+  
+    // Add or remove a country
+    if (e.originalEvent.ctrlKey) {
+      try {
+        await axios.delete(`/api/user/${username}/countries/${countryAbb}`, {
+          data: {
+            Country: countryAbb,
+            User: username,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        alert(
+          "An error occurred while updating the visited countries. Your changes might not be saved."
+        );
+      }
+    } else {
+      try {
+        await axios.post(`/api/user/${username}/countries/${countryAbb}`, {
+          data: {
+            Country: countryAbb,
+            User: username,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        alert(
+          "An error occurred while updating the visited countries. Your changes might not be saved."
+        );
+      }
+    }
   }
-}
+  
 
 // Load GeoJSON data for countries and add to map
 axios
