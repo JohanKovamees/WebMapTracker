@@ -1,17 +1,23 @@
 provider "google" {
-  project = "todo"
-  region  = "todo"
-  zone    = "todo"
+  project = var.project_id
+  region  = "europe-west8"
+  zone    = "europe-west8-a"
+}
+
+variable "project_id" {
+  type        = string
+  description = "GPC ID"
 }
 
 resource "google_compute_network" "vpc" {
-  name                    = "WebMapTracker-vpc"
+  name                    = "webmaptracker-vpc"
   auto_create_subnetworks = "false"
 }
 
 resource "google_compute_subnetwork" "subnet" {
   name          = "my-webapp-subnet"
   ip_cidr_range = "10.0.1.0/24"
+  region        = "europe-west8"
   network       = google_compute_network.vpc.self_link
 }
 
@@ -28,8 +34,8 @@ resource "google_compute_firewall" "firewall" {
 }
 
 resource "google_compute_instance" "default" {
-  name         = "WebMapTracker"
-  machine_type = "f1-micro"
+  name         = "webmaptracker"
+  machine_type = "e2-micro"
 
   boot_disk {
     initialize_params {
@@ -49,6 +55,9 @@ resource "google_compute_instance" "default" {
                             #!/bin/bash
                             apt-get update
                             apt-get install -y docker.io
-                            docker pull
+                            docker pull johankovamees/wmt_be:latest
+                            docker pull johankovamees/wmt_fe:latest
+                            docker run -d --name wmt_be -p 5000:5000 johankovamees/wmt_be:latest
+                            docker run -d --name wmt_fe -p 80:80 -p 443:443 johankovamees/wmt_fe:latest
                             EOF
 }

@@ -44,6 +44,7 @@
         const visitedCountries = mapData.visitedCountries;
 
         const map = L.map("map", {
+          doubleClickZoom: false,
           center: [20, 0],
           zoom: 2,
           minZoom: 2,
@@ -80,9 +81,29 @@
               };
             }
 
+            function onEachFeature(feature, layer) {
+              layer.on({
+                click: function (e) {
+                  const countryAbbreviation = feature.properties.Abbreviation;
+
+                  if (visitedCountries.includes(countryAbbreviation)) {
+                    visitedCountries = visitedCountries.filter(
+                      (abbr) => abbr !== countryAbbreviation
+                    );
+                  } else {
+                    visitedCountries.push(countryAbbreviation);
+                  }
+
+                  // Update the country style
+                  layer.setStyle(styleCountry(feature));
+                },
+              });
+            }
+
             // Add countries to the map
             L.geoJSON(geoJsonData, {
               style: styleCountry,
+              onEachFeature: onEachFeature,
               onEachFeature: function (feature, layer) {
                 layer.on({
                   click: function (e) {
